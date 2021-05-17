@@ -2,6 +2,32 @@ const compose = (...functions) => data =>
   functions.reduceRight((value, func) => func(value), data)
 
 
+// {
+//   tag: h1,
+//   attrs: {
+//     class: 'title'
+//   }
+// }
+
+// generate attributes tag in String, convert obj to String
+const attrsToString = (obj = {}) => {
+  const keys = Object.keys(obj);
+  let attrs = [];
+
+  for(let i=0; i< keys.length; i++){
+    const attr = keys[i];
+    attrs.push(`${attrs} = "${obj[attr]}"`);
+  }
+  
+  const string = attrs.slice('');
+
+  return string;
+}
+// this function generate this  class="title" 
+
+// generate tag and content
+const tag = (t) => (content) => `<${t}> ${content} </${t}>`;
+
 const description = document.querySelector('#description');
 const calories = document.querySelector('#calories'); 
 const carbs = document.querySelector('#carbs');
