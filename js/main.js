@@ -16,7 +16,7 @@ const attrsToString = (obj = {}) => {
 
   for(let i=0; i< keys.length; i++){
     const attr = keys[i];
-    attrs.push(`${attrs} = "${obj[attr]}"`);
+    attrs.push(`${attr}="${obj[attr]}"`);
   }
   
   const string = attrs.slice('');
@@ -25,8 +25,16 @@ const attrsToString = (obj = {}) => {
 }
 // this function generate this  class="title" 
 
-// generate tag and content
-const tag = (t) => (content) => `<${t}> ${content} </${t}>`;
+const tagAttrs = (obj) => (content = "") => `<${obj.tag}${obj.attrs ? ' ' : ''}${attrsToString(obj.attrs)}>${content}</${obj.tag}>`;
+
+// generate tag and content, depending on whether it is an object or a string
+const tag = (t) => {
+  if(typeof t === 'string'){
+    tagAttrs({tag: t})
+  }else{
+    tagAttrs(t);
+  }
+};
 
 const description = document.querySelector('#description');
 const calories = document.querySelector('#calories'); 
