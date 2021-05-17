@@ -7,6 +7,8 @@ const calories = document.querySelector('#calories');
 const carbs = document.querySelector('#carbs');
 const protein = document.querySelector('#protein');
 
+let state = [];
+
 const validateInputs = () => {
   description.value ? '' : description.classList.add('is-invalid');
   calories.value === '' ? calories.classList.add('is-invalid') : '';
@@ -14,7 +16,7 @@ const validateInputs = () => {
   protein.value ? '' : protein.classList.add('is-invalid');
 
   if(description.value && calories.value && carbs.value && protein.value){
-    console.log('Todo OK')
+    addItem();
   }
 
 }
@@ -29,6 +31,26 @@ const changedInput = (input) => {
   input.addEventListener( 'change' , () => {
     input.classList.remove('is-invalid');
   });
+}
+
+const addItem = () => {
+  let newItem = {
+    description: description.value,
+    calories: calories.value,
+    carbs: carbs.value,
+    protein: protein.value
+  }
+
+  state.push(newItem);
+  cleanInputs();
+  console.log(state);
+}
+
+const cleanInputs = () => {
+  description.value = '';
+  calories.value = '';
+  carbs.value = '';
+  protein.value = '';
 }
 
 pressKeyInput(description);
