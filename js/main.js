@@ -9,32 +9,40 @@ const compose = (...functions) => data =>
 //   }
 // }
 
-// generate attributes tag in String, convert obj to String
+
 const attrsToString = (obj = {}) => {
-  const keys = Object.keys(obj);
-  let attrs = [];
+    const keys = Object.keys(obj);
+    let attrs = [];
 
-  for(let i=0; i< keys.length; i++){
-    const attr = keys[i];
-    attrs.push(`${attr}="${obj[attr]}"`);
-  }
-  
-  const string = attrs.slice('');
+    for(let i=0; i<keys.length; i++){
+      const attr = keys[i];
+      attrs.push(`${attr}="${obj[attr]}"`);
+    }
 
-  return string;
+    const string = attrs.join('');
+
+    return string;
 }
-// this function generate this  class="title" 
 
-const tagAttrs = (obj) => (content = "") => `<${obj.tag}${obj.attrs ? ' ' : ''}${attrsToString(obj.attrs)}>${content}</${obj.tag}>`;
+const attrsTag = (obj) => (content = "") => `<${obj.tag}${obj.attrs ? ' ' : ''}${attrsToString(obj.attrs)}> ${content} </${obj.tag}>`
 
-// generate tag and content, depending on whether it is an object or a string
 const tag = (t) => {
   if(typeof t === 'string'){
-    tagAttrs({tag: t})
+    attrsTag({tag: t})
   }else{
-    tagAttrs(t);
+    attrsTag(t)
   }
-};
+}
+
+// generate Rows
+const tableRow = tag('tr');
+// const tableRows = items => tableRow(tableCells(items)), first way for generated rows
+const tableRows = items => compose(tableRow, tableCells)(items);
+
+// Generate Cells
+const tableCell = tag('td');
+const tableCells = items => items.map(tableCell).join('');
+
 
 const description = document.querySelector('#description');
 const calories = document.querySelector('#calories'); 
@@ -77,6 +85,7 @@ const addItem = () => {
 
   state.push(newItem);
   cleanInputs();
+  tableRows(state);
   console.log(state);
 }
 
