@@ -9,30 +9,37 @@ const compose = (...functions) => data =>
 //   }
 // }
 
+// Codigo escrito en programaicñon imperativa
+// const attrsToString = (obj = {}) => {
+//     const keys = Object.keys(obj);
+//     let attrs = [];
 
-const attrsToString = (obj = {}) => {
-    const keys = Object.keys(obj);
-    let attrs = [];
+//     for(let i=0; i<keys.length; i++){
+//       const attr = keys[i];
+//       attrs.push(`${attr}="${obj[attr]}"`);
+//     }
 
-    for(let i=0; i<keys.length; i++){
-      const attr = keys[i];
-      attrs.push(`${attr}="${obj[attr]}"`);
-    }
+//     const string = attrs.join('');
 
-    const string = attrs.join('');
+//     return string;
+// }
 
-    return string;
-}
+// codigo de la funcion en programación declarativa
+const attrsToString = (obj = {}) => Object.keys(obj).map( attr =>  `${attr}="${obj[attr]}"`).join('')
 
 const attrsTag = (obj) => (content = "") => `<${obj.tag}${obj.attrs ? ' ' : ''}${attrsToString(obj.attrs)}> ${content} </${obj.tag}>`
 
-const tag = (t) => {
-  if(typeof t === 'string'){
-    return attrsTag({tag: t})
-  }else{
-    return attrsTag(t)
-  }
-}
+// Funcion escrita con programación imperativa
+// const tag = (t) => {
+//   if(typeof t === 'string'){
+//     return attrsTag({tag: t})
+//   }else{
+//     return attrsTag(t)
+//   }
+// }
+
+// la funcion escrita en programaciñon declarativa
+const tag = t => (typeof t === 'string') ? attrsTag({tag: t}) : attrsTag(t);
 
 // generate Rows
 const tableRow = tag('tr');
