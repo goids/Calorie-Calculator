@@ -43,6 +43,7 @@ const tableRows = items => compose(tableRow, tableCells)(items);
 const tableCell = tag('td');
 const tableCells = items => items.map(tableCell).join('');
 
+const trashIcon = tag({ tag: 'i', attrs: { class: 'fas fa-trash-alt'}})('');
 
 let description = document.querySelector('#description');
 let calories = document.querySelector('#calories'); 
@@ -119,14 +120,30 @@ changedInput(protein);
 const button = document.querySelector('button');
 button.addEventListener('click', validateInputs);
 
+
+
 const render = () => {
   document.querySelector('tbody').textContent = '';
 
-  const allItems = state.map( item => {
-    return tableRows([item.description, item.calories, item.carbs, item.protein]);
+  const allItems = state.map( (item, index) => {
+    const removeButton = tag({
+      tag: 'button',
+      attrs: {
+        class: 'btn btn-outline-danger',
+        onclick: `removeItem(${index})`
+      }
+    })(trashIcon);
+    
+    return tableRows([item.description, item.calories, item.carbs, item.protein, removeButton]);
   })
 
   document.querySelector('tbody').innerHTML += allItems.join(''); 
+}
+
+const removeItem = (index) => {
+  state.splice(index, 1);
+  updateTotal();
+  render();
 }
 
 /**
