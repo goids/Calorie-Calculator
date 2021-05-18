@@ -28,9 +28,9 @@ const attrsTag = (obj) => (content = "") => `<${obj.tag}${obj.attrs ? ' ' : ''}$
 
 const tag = (t) => {
   if(typeof t === 'string'){
-    attrsTag({tag: t})
+    return attrsTag({tag: t})
   }else{
-    attrsTag(t)
+    return attrsTag(t)
   }
 }
 
@@ -44,10 +44,10 @@ const tableCell = tag('td');
 const tableCells = items => items.map(tableCell).join('');
 
 
-const description = document.querySelector('#description');
-const calories = document.querySelector('#calories'); 
-const carbs = document.querySelector('#carbs');
-const protein = document.querySelector('#protein');
+let description = document.querySelector('#description');
+let calories = document.querySelector('#calories'); 
+let carbs = document.querySelector('#carbs');
+let protein = document.querySelector('#protein');
 
 let state = [];
 
@@ -78,15 +78,30 @@ const changedInput = (input) => {
 const addItem = () => {
   let newItem = {
     description: description.value,
-    calories: calories.value,
-    carbs: carbs.value,
-    protein: protein.value
+    calories: parseInt(calories.value),
+    carbs: parseInt(carbs.value),
+    protein: parseInt(protein.value)
   }
 
   state.push(newItem);
+  updateTotal();
   cleanInputs();
-  tableRows(state);
   console.log(state);
+  render();
+}
+
+const updateTotal = () => {
+  let calories = 0, carbs= 0, protein = 0;
+
+  state.map( item => {
+    calories += item.calories,
+    carbs += item.carbs,
+    protein += item.protein
+  });
+
+  document.querySelector('#totalCalories').textContent = calories;
+  document.querySelector('#totalCarbs').textContent = carbs;
+  document.querySelector('#totalProtein').textContent = protein;
 }
 
 const cleanInputs = () => {
@@ -103,6 +118,16 @@ changedInput(protein);
 
 const button = document.querySelector('button');
 button.addEventListener('click', validateInputs);
+
+const render = () => {
+  document.querySelector('tbody').textContent = '';
+
+  const allItems = state.map( item => {
+    return tableRows([item.description, item.calories, item.carbs, item.protein]);
+  })
+
+  document.querySelector('tbody').innerHTML += allItems.join(''); 
+}
 
 /**
  * DE ESTA MANERA PUEDO LLAMAR LA FUNCION ANTES O DESPUES DE HACER SU LLAMADO
